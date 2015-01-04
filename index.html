@@ -1,0 +1,202 @@
+<!--
+
+ Copyright 2012 Kii Corporation
+ http://kii.com
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+
+//-->
+
+<html>
+    <head>
+    
+        <title>HelloKii</title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1"> 
+        
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.8.1.min.js"></script>
+        <script type="text/javascript" src="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.js"></script>
+        <link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.css" />
+        <script type="text/javascript" src="KiiSDKv2.1.11.js"></script>
+        <link rel="stylesheet" href="css/app.css">
+
+        <script type="text/javascript">
+
+            $(document).ready(function() {
+            	// 
+            	//
+                // initialize the Kii SDK!
+                Kii.initializeWithSite("d07f81a2", "d017b33f77cab6f5f149fec5ec4b9776", KiiSite.US);
+
+            });
+
+            var state = 0, color = '0xf89d76', brightness = 70, CT = 10;
+
+            function postState(theState){
+                state = theState;
+                $.ajax({
+                    type: "POST",
+                    url: 'http://api.kii.com/api/apps/'+ Kii.getAppID() +'/things/VENDOR_THING_ID:' + getParameter('mac') + '/buckets/LEDControl/objects',
+                    data: '{"state":'+state+', "color":'+color+', "brightness":'+brightness+', "CT":'+CT+'}',
+                    headers: {
+                      'Authorization': 'Bearer ' + getParameter('access'),
+                      'X-Kii-AppID': Kii.getAppID(),
+                      'X-Kii-AppKey': Kii.getAppKey(),
+                      'Content-Type': 'application/vnd.kii.OauthTokenRequest+json'
+                    },
+                    success: function (data) {
+                        console.log("good", data);
+                    },
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    }
+                });
+            }
+
+            // function postColor(theColor){
+            //     color = theColor;
+            //     $.ajax({
+            //         type: "POST",
+            //         url: 'http://api.kii.com/api/apps/'+ Kii.getAppID() +'/things/VENDOR_THING_ID:' + getParameter('mac') + '/buckets/LEDControl/objects',
+            //         data: '{"state":'+state+', "color":'+color+', "brightness":'+brightness+', "CT":'+CT+'}',
+            //         headers: {
+            //           'Authorization': 'Bearer ' + getParameter('access'),
+            //           'X-Kii-AppID': Kii.getAppID(),
+            //           'X-Kii-AppKey': Kii.getAppKey(),
+            //           'Content-Type': 'application/vnd.kii.OauthTokenRequest+json'
+            //         },
+            //         success: function (data) {
+            //             console.log("good");
+            //         },
+            //         error: function (XMLHttpRequest, textStatus, errorThrown) {
+            //         }
+            //     });
+            // }
+
+            // function postBrightness(theBrightness){
+            //     brightness = theBrightness;
+            //     $.ajax({
+            //         type: "POST",
+            //         url: 'http://api.kii.com/api/apps/'+ Kii.getAppID() +'/things/VENDOR_THING_ID:' + getParameter('mac') + '/buckets/LEDControl/objects',
+            //         data: '{"state":'+state+', "color":'+color+', "brightness":'+brightness+', "CT":'+CT+'}',
+            //         headers: {
+            //           'Authorization': 'Bearer ' + getParameter('access'),
+            //           'X-Kii-AppID': Kii.getAppID(),
+            //           'X-Kii-AppKey': Kii.getAppKey(),
+            //           'Content-Type': 'application/vnd.kii.OauthTokenRequest+json'
+            //         },
+            //         success: function (data) {
+            //             console.log("good");
+            //         },
+            //         error: function (XMLHttpRequest, textStatus, errorThrown) {
+            //         }
+            //     });
+            // }
+
+            // function postCT(theCT){
+            //     CT = theCT;
+            //     $.ajax({
+            //         type: "POST",
+            //         url: 'http://api.kii.com/api/apps/'+ Kii.getAppID() +'/things/VENDOR_THING_ID:' + getParameter('mac') + '/buckets/LEDControl/objects',
+            //         data: '{"state":'+state+', "color":'+color+', "brightness":'+brightness+', "CT":'+CT+'}',
+            //         headers: {
+            //           'Authorization': 'Bearer ' + getParameter('access'),
+            //           'X-Kii-AppID': Kii.getAppID(),
+            //           'X-Kii-AppKey': Kii.getAppKey(),
+            //           'Content-Type': 'application/vnd.kii.OauthTokenRequest+json'
+            //         },
+            //         success: function (data) {
+            //             console.log("good");
+            //         },
+            //         error: function (XMLHttpRequest, textStatus, errorThrown) {
+            //         }
+            //     });
+            // }
+
+            function getParameter( name ){
+                name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+                var regexS = "[\\?&]"+name+"=([^&#]*)";
+                var regex = new RegExp( regexS );
+                var results = regex.exec( window.location.href );
+                if( results == null )
+                    return null;
+                else
+                    return results[1];
+            }
+            
+            $( ".selector" ).slider( "disable" );
+
+        </script>
+
+        <style type="text/css">
+            .ui-page.ui-body-c {
+                background: url(bg.jpg);
+                background-repeat:no-repeat;
+                background-position:center center;
+                background-size:cover;  
+                background-attachment:scroll;
+                background-size:100% 100%;
+            }   
+        </style>
+	
+    </head>
+    
+    <body >
+
+        <!-- START HEADER -->
+        <div data-role="header" data-theme="c">
+            <h1>Light remote control</h1>
+        </div>
+        <!-- END HEADER -->
+
+        <!-- START CONTENT -->
+        <div data-role="content" style="text-align:center;">  
+
+            <div >
+                <img src="icon_light.png" style="width:190px">
+            </div>
+            
+            <div id="navgroup">
+                <div data-role="controlgroup" data-type="horizontal">
+                    <button onclick="postState(1)" style="align:center;">On</button>
+                    <button onclick="postState(0)" data-theme="b">Off</button> 
+                </div>
+            </div>
+            <div style="margin:18px 0px">
+                <label for="slider-1">Color temparenture(Disabled):</label>
+                <input type="range" name="slider-1" id="slider-1" value="50" min="0" max="100" disabled="true">           
+            </div>
+
+            <div>
+                <label for="slider-2">Brightness(Disabled):</label>
+                <input type="range" name="slider-2" id="slider-2" value="50" min="0" max="100" disabled="true">           
+            </div>
+            
+            <div >
+                <form>
+                    <fieldset data-role="fieldcontain">
+                        <label for="color">Color(Disabled)</label>
+                        <br>
+                        <select name="color" id="color" disabled="true">
+                            <option value="white">White</option>
+                            <option value="black">Black</option>
+                        </select>
+                    </fieldset>
+                </form>
+            </div>
+
+        </div>
+        <!-- END CONTENT -->
+
+    </body>
+
+</html>
